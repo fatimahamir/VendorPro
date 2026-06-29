@@ -12,10 +12,19 @@ connectDB();
 
 const app = express();
 
+// ✅ CORS Configuration (Single, Clean)
+app.use(cors({
+  origin: [
+    'http://localhost:5173', 
+    'http://localhost:3000',
+    'https://vendorpro-frontend.vercel.app'  // ✅ Baad mein apna Vercel frontend URL add karein
+  ],
+  credentials: true
+}));
+
 // Middleware
-app.use(cors());
-app.use(express.json()); // Parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Health check route
 app.get('/', (req, res) => {
@@ -34,14 +43,16 @@ app.use('/api/quotations', require('./routes/quotationRoutes'));
 app.use(notFound);
 app.use(errorHandler);
 
-// Start server
+// ✅ Vercel Compatibility
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-  console.log(`🌐 API available at http://localhost:${PORT}`);
-});
+
+// Sirf local development mein server start karein
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`✅ Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    console.log(`🌐 API available at http://localhost:${PORT}`);
+  });
+}
+
+// ✅ Vercel ke liye app export karein
 module.exports = app;
-app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
-  credentials: true
-}));
