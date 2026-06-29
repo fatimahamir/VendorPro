@@ -4,7 +4,7 @@ import axios from 'axios';
 const AuthContext = createContext();
 
 // Configure axios
-axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = 'https://vendor-pro-nine.vercel.app/api';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
