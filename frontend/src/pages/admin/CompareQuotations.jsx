@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import CompareCard from '../../components/quotations/CompareCard';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const CompareQuotations = () => {
   const { requestId } = useParams();
   const [quotations, setQuotations] = useState([]);
@@ -15,7 +17,7 @@ const CompareQuotations = () => {
   const fetchComparisons = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:5000/api/quotations/compare/${requestId}`, {
+      const response = await axios.get(`${API_URL}/quotations/compare/${requestId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -31,11 +33,11 @@ const CompareQuotations = () => {
   const handleStatusUpdate = async (responseId, newStatus) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/api/quotations/responses/${responseId}/status`, 
+      await axios.put(`${API_URL}/quotations/responses/${responseId}/status`, 
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      fetchComparisons(); // Refresh data
+      fetchComparisons();
     } catch (error) {
       console.error('Error updating status:', error);
     }

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FiBarChart2, FiCalendar, FiUsers, FiEye } from 'react-icons/fi';
+import { FiBarChart2, FiCalendar, FiUsers } from 'react-icons/fi';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const QuotationRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -15,7 +17,7 @@ const QuotationRequests = () => {
   const fetchRequests = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/quotations/requests', {
+      const response = await axios.get(`${API_URL}/quotations/requests`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setRequests(response.data.requests);

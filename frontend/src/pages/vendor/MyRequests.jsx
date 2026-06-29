@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FiAlertCircle, FiCalendar, FiCheckCircle, FiXCircle, FiClock, FiDollarSign } from 'react-icons/fi';
+import { FiAlertCircle, FiCheckCircle, FiXCircle, FiClock, FiDollarSign } from 'react-icons/fi';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const MyRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -16,14 +18,14 @@ const MyRequests = () => {
       const token = localStorage.getItem('token');
       const user = JSON.parse(localStorage.getItem('user'));
       
-      const response = await axios.get('http://localhost:5000/api/quotations/requests', {
+      const response = await axios.get(`${API_URL}/quotations/requests`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
       const requestsWithSubmissions = await Promise.all(
         response.data.requests.map(async (request) => {
           try {
-            const res = await axios.get(`http://localhost:5000/api/quotations/requests/${request._id}`, {
+            const res = await axios.get(`${API_URL}/quotations/requests/${request._id}`, {
               headers: { Authorization: `Bearer ${token}` }
             });
             

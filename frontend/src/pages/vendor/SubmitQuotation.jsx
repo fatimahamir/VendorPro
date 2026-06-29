@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { FiDollarSign, FiFileText, FiSend, FiCheckCircle, FiArrowLeft } from 'react-icons/fi';
+import { FiDollarSign, FiFileText, FiSend, FiCheckCircle, FiArrowLeft, FiAlertCircle } from 'react-icons/fi';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const SubmitQuotation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Agar Dashboard se aaye hain toh requestId yahan mil jayegi
   const requestId = location.state?.requestId || ''; 
   
   const [formData, setFormData] = useState({
@@ -32,12 +33,11 @@ const SubmitQuotation = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:5000/api/quotations/responses', 
+        `${API_URL}/quotations/responses`, 
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setSuccess(true);
-      // 2 second baad dashboard par wapis bhej dein
       setTimeout(() => navigate('/vendor/dashboard'), 2000);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to submit quotation. Please try again.');
@@ -46,7 +46,6 @@ const SubmitQuotation = () => {
     }
   };
 
-  // Success State UI
   if (success) {
     return (
       <div className="d-flex justify-content-center align-items-center fade-in" style={{ minHeight: '60vh' }}>
@@ -67,10 +66,8 @@ const SubmitQuotation = () => {
     );
   }
 
-  // Form UI
   return (
     <div className="fade-in" style={{ maxWidth: '800px', margin: '0 auto' }}>
-      {/* Header */}
       <div className="d-flex align-items-center gap-3 mb-4">
         <button 
           className="btn btn-outline-primary rounded-circle d-flex justify-content-center align-items-center"
@@ -91,8 +88,6 @@ const SubmitQuotation = () => {
       <div className="card shadow-sm">
         <div className="card-body p-4 p-md-5">
           <form onSubmit={handleSubmit}>
-            
-            {/* Request ID */}
             <div className="mb-4">
               <label className="form-label small fw-bold">Quotation Request ID</label>
               <input 
@@ -103,14 +98,13 @@ const SubmitQuotation = () => {
                 onChange={handleChange}
                 placeholder="Enter Request ID"
                 required
-                readOnly // Agar aap chahte hain ke user ID manually change na kare
+                readOnly
               />
               <small className="text-muted">
                 Yeh ID automatically fill ho jayegi agar aap Dashboard se aaye hain.
               </small>
             </div>
 
-            {/* Quotation Amount */}
             <div className="mb-4">
               <label className="form-label small fw-bold">
                 <FiDollarSign className="me-1" /> Quotation Amount
@@ -130,7 +124,6 @@ const SubmitQuotation = () => {
               </div>
             </div>
 
-            {/* Proposal Details */}
             <div className="mb-4">
               <label className="form-label small fw-bold">
                 <FiFileText className="me-1" /> Proposal Details & Terms
@@ -146,7 +139,6 @@ const SubmitQuotation = () => {
               ></textarea>
             </div>
 
-            {/* Action Buttons */}
             <div className="d-flex gap-3 mt-4">
               <button 
                 type="button" 

@@ -5,6 +5,8 @@ import StatsCard from '../../components/dashboard/StatsCard';
 import RecentActivity from '../../components/dashboard/RecentActivity';
 import { FiUsers, FiFileText, FiClock, FiCheckCircle } from 'react-icons/fi';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const Dashboard = () => {
   const [stats, setStats] = useState({
     totalVendors: 0,
@@ -23,7 +25,7 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/quotations/dashboard', {
+      const response = await axios.get(`${API_URL}/quotations/dashboard`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setStats(response.data.stats);

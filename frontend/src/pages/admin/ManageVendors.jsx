@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FiSearch, FiPlus, FiEdit2, FiTrash2, FiX } from 'react-icons/fi';
+import { FiSearch, FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const ManageVendors = () => {
   const [vendors, setVendors] = useState([]);
@@ -19,7 +21,7 @@ const ManageVendors = () => {
   const fetchVendors = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get(`http://localhost:5000/api/vendors?search=${search}`, {
+      const res = await axios.get(`${API_URL}/vendors?search=${search}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setVendors(res.data.vendors);
@@ -37,8 +39,8 @@ const ManageVendors = () => {
     try {
       const token = localStorage.getItem('token');
       const url = editingVendor 
-        ? `http://localhost:5000/api/vendors/${editingVendor._id}`
-        : 'http://localhost:5000/api/vendors';
+        ? `${API_URL}/vendors/${editingVendor._id}`
+        : `${API_URL}/vendors`;
       
       const method = editingVendor ? 'put' : 'post';
       await axios[method](url, formData, { headers: { Authorization: `Bearer ${token}` } });
@@ -68,7 +70,7 @@ const ManageVendors = () => {
     if (!window.confirm('Are you sure you want to delete this vendor?')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/vendors/${id}`, {
+      await axios.delete(`${API_URL}/vendors/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchVendors();
@@ -88,7 +90,6 @@ const ManageVendors = () => {
         </button>
       </div>
 
-      {/* Search Bar */}
       <div className="input-group mb-4" style={{ maxWidth: '400px' }}>
         <span className="input-group-text bg-white border-end-0"><FiSearch className="text-muted" /></span>
         <input 
@@ -100,7 +101,6 @@ const ManageVendors = () => {
         />
       </div>
 
-      {/* Vendors Table */}
       <div className="card">
         <div className="table-responsive">
           <table className="table table-hover align-middle mb-0">
@@ -139,7 +139,6 @@ const ManageVendors = () => {
         </div>
       </div>
 
-      {/* Add/Edit Modal */}
       {showModal && (
         <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <div className="modal-dialog modal-dialog-centered">

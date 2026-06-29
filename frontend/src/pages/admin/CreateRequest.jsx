@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FiFileText, FiCalendar, FiUsers, FiCheck } from 'react-icons/fi';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const CreateRequest = () => {
   const navigate = useNavigate();
   const [vendors, setVendors] = useState([]);
@@ -18,7 +20,7 @@ const CreateRequest = () => {
   const fetchVendors = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5000/api/vendors', {
+      const res = await axios.get(`${API_URL}/vendors`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setVendors(res.data.vendors);
@@ -46,7 +48,7 @@ const CreateRequest = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/quotations/requests', formData, {
+      await axios.post(`${API_URL}/quotations/requests`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert('Quotation request created successfully!');
