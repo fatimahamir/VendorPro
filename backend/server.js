@@ -40,8 +40,7 @@ app.listen(PORT, () => {
   console.log(`✅ Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
   console.log(`🌐 API available at http://localhost:${PORT}`);
 });
-
-
+module.exports = app;
 app.use(cors({
   origin: ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true
